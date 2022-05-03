@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CustomCalendarCell" id="AFM-hT-1vl" customClass="CustomCalendarCell" customModule="CustomCalendarView" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="67" height="55"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="x4o-cf-cnv">
+                <rect key="frame" x="0.0" y="0.0" width="67" height="55"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="31" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kpt-Im-a6o">
+                        <rect key="frame" x="0.0" y="5" width="67" height="45"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W0v-ln-VSw">
+                        <rect key="frame" x="26" y="52" width="15" height="2"/>
+                        <color key="backgroundColor" systemColor="labelColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="2" id="3NR-fL-D2h"/>
+                            <constraint firstAttribute="width" constant="15" id="HiH-DM-dbG"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="kpt-Im-a6o" secondAttribute="trailing" id="5vG-gx-XaB"/>
+                    <constraint firstItem="kpt-Im-a6o" firstAttribute="top" secondItem="x4o-cf-cnv" secondAttribute="top" constant="5" id="Cic-yS-Mcg"/>
+                    <constraint firstItem="W0v-ln-VSw" firstAttribute="top" secondItem="kpt-Im-a6o" secondAttribute="bottom" constant="2" id="WqL-Vb-BP4"/>
+                    <constraint firstAttribute="bottom" secondItem="kpt-Im-a6o" secondAttribute="bottom" constant="5" id="XJB-3H-nta"/>
+                    <constraint firstItem="kpt-Im-a6o" firstAttribute="leading" secondItem="x4o-cf-cnv" secondAttribute="leading" id="aK1-it-oVf"/>
+                    <constraint firstItem="W0v-ln-VSw" firstAttribute="centerX" secondItem="kpt-Im-a6o" secondAttribute="centerX" id="yCW-nf-nmr"/>
+                </constraints>
+            </collectionViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <size key="customSize" width="67" height="55"/>
+            <connections>
+                <outlet property="dayFooterView" destination="W0v-ln-VSw" id="zQr-JV-jBN"/>
+                <outlet property="dayLabel" destination="kpt-Im-a6o" id="BlO-dp-5yL"/>
+            </connections>
+            <point key="canvasLocation" x="-0.7246376811594204" y="106.13839285714285"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
