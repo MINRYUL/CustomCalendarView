@@ -86,10 +86,10 @@ final class CustomCalendarViewModel {
         self._beforeComponents.month = currentMonth - 1
         self._beforeComponents.day = 1
         
-        self._configureCalendar()
+        self._makeCalendarCellDataSource()
     }
     
-    private func _configureCalendar() {
+    private func _makeCalendarCellDataSource() {
         guard let firstDayOfMonth = _calendar.date(from: _components),
               let beforeDayOfMonth = _calendar.date(from: _beforeComponents),
               let daysCountInMonth = _calendar.range(of: .day, in: .month, for: firstDayOfMonth)?.count,
@@ -224,7 +224,7 @@ extension CustomCalendarViewModel {
                 
                 self._beforeComponents.month = month - 2
                 self._components.month = month - 1
-                self._configureCalendar()
+                self._makeCalendarCellDataSource()
             })
             .disposed(by: disposeBag)
   }
@@ -238,7 +238,7 @@ extension CustomCalendarViewModel {
                 
                 self._beforeComponents.month = month
                 self._components.month = month + 1
-                self._configureCalendar()
+                self._makeCalendarCellDataSource()
                 
             })
             .disposed(by: disposeBag)
