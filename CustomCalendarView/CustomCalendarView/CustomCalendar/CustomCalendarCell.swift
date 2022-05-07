@@ -51,7 +51,7 @@ class CustomCalendarCell: UICollectionViewCell {
         self.dayLabel.text = "\(cellModel.day)"
         
         if !cellModel.isCurrentMonth {
-            self.dayLabel.alpha = 0.06
+            self.dayLabel.alpha = 0.3
         } else {
             self.dayLabel.alpha = 1.0
         }

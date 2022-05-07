@@ -181,9 +181,12 @@ extension CustomCalendarViewModel {
                       let cellDataSource = try? self._cellDataSource.value(),
                       let cellModels = cellDataSource.first else { return }
                 
+                var isCurrentMonth = true
+                
                 let dataSource = cellModels.items.map { cell -> CustomCalendarCellModel in
                     if model.identity == cell.identity {
-                        self._selectedDate.onNext(model.date ?? Date())
+                        if !model.isCurrentMonth { isCurrentMonth = false }
+                        else { self._selectedDate.onNext(model.date ?? Date()) }
                         return CustomCalendarCellModel(
                             identity: cell.identity,
                             isCurrentMonth: cell.isCurrentMonth,
@@ -203,9 +206,11 @@ extension CustomCalendarViewModel {
                     )
                 }
                 
-                self._cellDataSource.onNext([
-                    CustomCalendarCellDataSource(items: dataSource, identity: cellModels.identity)
-                ])
+                if isCurrentMonth {
+                    self._cellDataSource.onNext([
+                        CustomCalendarCellDataSource(items: dataSource, identity: cellModels.identity)
+                    ])
+                }
             })
             .disposed(by: disposeBag)
     }
