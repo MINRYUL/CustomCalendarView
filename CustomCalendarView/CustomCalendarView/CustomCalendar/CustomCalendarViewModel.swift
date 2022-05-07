@@ -40,6 +40,7 @@ final class CustomCalendarViewModel {
     private let _cellDataSource = BehaviorSubject<[CustomCalendarCellDataSource]>(value: [])
     
     private let _dateFormatter = DateFormatter()
+    private let _dayFormatter = DateFormatter()
     
     private let _currentDate = Date()
     private var _calendar = Calendar.init(identifier: .gregorian)
@@ -68,6 +69,7 @@ final class CustomCalendarViewModel {
     
     private func _configure() {
         self._dateFormatter.dateFormat = "yyyy.MM"
+        self._dayFormatter.dateFormat = "yyyyMMdd"
         
         self._configureCalendar(self._currentDate)
     }
@@ -153,81 +155,87 @@ final class CustomCalendarViewModel {
         guard let compareDate = try? self._selectedDate.value(),
               let date = date else { return false }
         
-        let comparisonResult = compareDate.compare(date)
-        return comparisonResult == .orderedSame
+        let firstDate = _dayFormatter.string(from: compareDate)
+        let secondDate = _dayFormatter.string(from: date)
+        
+        return firstDate == secondDate
     }
     
     private func isSameDate(_ date: Date?) -> Bool {
         guard let date = date else { return false }
         
-        let comparisonResult = date.compare(self._currentDate)
-        return comparisonResult == .orderedSame
+        let firstDate = _dayFormatter.string(from: self._currentDate)
+        let secondDate = _dayFormatter.string(from: date)
+        
+        return firstDate == secondDate
     }
 }
 
 //MARK: - Binding
 extension CustomCalendarViewModel {
-  private func _bindSelectedItem() {
-    self._selectedItem
-      .compactMap { $0 }
-      .subscribe(onNext : { [weak self] model in
-        guard let self = self,
-              let cellDataSource = try? self._cellDataSource.value(),
-              let cellModels = cellDataSource.first else { return }
-        
-        let dataSource = cellModels.items.map { cell -> CustomCalendarCellModel in
-          if model.identity == cell.identity {
-            self._selectedDate.onNext(model.date ?? Date())
-            return CustomCalendarCellModel(
-              identity: cell.identity,
-              isCurrentMonth: cell.isCurrentMonth,
-              isSelected: true,
-              isCurrentDay: cell.isCurrentDay,
-              day: cell.day,
-              date: cell.date
-            )
-          }
-          return CustomCalendarCellModel(
-            identity: cell.identity,
-            isCurrentMonth: cell.isCurrentMonth,
-            isSelected: false,
-            isCurrentDay: cell.isCurrentDay,
-            day: cell.day,
-            date: cell.date
-          )
-        }
-        
-        self._cellDataSource.onNext([
-          CustomCalendarCellDataSource(items: dataSource, identity: cellModels.identity)
-        ])
-      })
-      .disposed(by: disposeBag)
+    private func _bindSelectedItem() {
+        self._selectedItem
+            .compactMap { $0 }
+            .subscribe(onNext : { [weak self] model in
+                guard let self = self,
+                      let cellDataSource = try? self._cellDataSource.value(),
+                      let cellModels = cellDataSource.first else { return }
+                
+                let dataSource = cellModels.items.map { cell -> CustomCalendarCellModel in
+                    if model.identity == cell.identity {
+                        self._selectedDate.onNext(model.date ?? Date())
+                        return CustomCalendarCellModel(
+                            identity: cell.identity,
+                            isCurrentMonth: cell.isCurrentMonth,
+                            isSelected: true,
+                            isCurrentDay: cell.isCurrentDay,
+                            day: cell.day,
+                            date: cell.date
+                        )
+                    }
+                    return CustomCalendarCellModel(
+                        identity: cell.identity,
+                        isCurrentMonth: cell.isCurrentMonth,
+                        isSelected: false,
+                        isCurrentDay: cell.isCurrentDay,
+                        day: cell.day,
+                        date: cell.date
+                    )
+                }
+                
+                self._cellDataSource.onNext([
+                    CustomCalendarCellDataSource(items: dataSource, identity: cellModels.identity)
+                ])
+            })
+            .disposed(by: disposeBag)
+    }
+  
+    private func _bindBeforeMonth() {
+        self._beforeMonth
+            .compactMap { $0 }
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self,
+                      let month = self._components.month else { return }
+                
+                self._beforeComponents.month = month - 2
+                self._components.month = month - 1
+                self._configureCalendar()
+            })
+            .disposed(by: disposeBag)
   }
   
-  private func _bindBeforeMonth() {
-    self._beforeMonth
-      .compactMap { $0 }
-      .subscribe(onNext: { [weak self] _ in
-        guard let self = self,
-              let month = self._components.month else { return }
-        
-        self._components.month = month - 1
-        self._configureCalendar()
-      })
-      .disposed(by: disposeBag)
-  }
-  
-  private func _bindNextMonth() {
-    self._nextMonth
-      .compactMap { $0 }
-      .subscribe(onNext: { [weak self] _ in
-        guard let self = self,
-              let month = self._components.month else { return }
-        
-        self._components.month = month + 1
-        self._configureCalendar()
-        
-      })
-      .disposed(by: disposeBag)
+    private func _bindNextMonth() {
+        self._nextMonth
+            .compactMap { $0 }
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self,
+                      let month = self._components.month else { return }
+                
+                self._beforeComponents.month = month
+                self._components.month = month + 1
+                self._configureCalendar()
+                
+            })
+            .disposed(by: disposeBag)
   }
 }

@@ -22,6 +22,16 @@ class CustomCalendarCell: UICollectionViewCell {
         )
     }
     
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self._configureView()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self._configureView()
+    }
+    
     override func prepareForReuse() {
         self.dayLabel.font = .systemFont(ofSize: 15, weight: .regular)
         self.dayLabel.alpha = 1.0
@@ -29,6 +39,9 @@ class CustomCalendarCell: UICollectionViewCell {
         self.backgroundColor = .clear
         self.dayLabel.textColor = .label
         self.dayFooterView.backgroundColor = .label
+    }
+    
+    private func _configureView() {
         self.layer.cornerRadius = 10
         self.layer.masksToBounds = false
         self.clipsToBounds = true
